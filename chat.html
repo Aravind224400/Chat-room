@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>Welcome, {{ username }}</h2>
+    <a href="/logout">Logout</a>
+    <ul id="messages"></ul>
+    <input id="message" placeholder="Type message..."/>
+    <button onclick="sendMessage()">Send</button>
+    <script>
+        const socket = io();
+        const username = "{{ username }}";
+
+        socket.emit('join', { username: username, room: "public" });
+
+        socket.on('message', function(data) {
+            const li = document.createElement("li");
+            li.textContent = data;
+            document.getElementById("messages").appendChild(li);
+        });
+
+        function sendMessage() {
+            const msg = document.getElementById("message").value;
+            if (msg.trim()) {
+                socket.emit('message', { msg: msg, room: "public" });
+                document.getElementById("message").value = '';
+            }
+        }
+    </script>
+</body>
+</html>
