@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: couple-chat
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app --worker-class eventlet -w 1
+    plan: free
